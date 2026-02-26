@@ -5,10 +5,15 @@
     <color name="accent">#03DAC5</color>
     <color name="record_button">#E53935</color>
     <color name="record_button_active">#B71C1C</color>
-    <color name="play_button">#4CAF50</color>
-    <color name="stop_button">#FF9800</color>
-    <color name="status_text">#666666</color>
-    <color name="hint_text">#999999</color>
-    <color name="focus_highlight">#FFEB3B</color>
-    <color name="focus_border">#1565C0</color>
+    <color name="play_button">#43A047</color>
+    <color name="stop_button">#FB8C00</color>
+    <color name="status_text">#424242</color>
+    <color name="hint_text">#9E9E9E</color>
+    <color name="focus_border">#2196F3</color>
+    <color name="focus_border_thick">#1976D2</color>
+    <color name="background">#FAFAFA</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="divider">#E0E0E0</color>
+    <color name="item_selected">#E3F2FD</color>
+    <color name="item_focused">#BBDEFB</color>
 </resources>

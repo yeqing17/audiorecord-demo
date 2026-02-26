@@ -3,39 +3,76 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="12dp"
+    android:padding="16dp"
     android:gravity="center_vertical"
-    android:background="@drawable/recording_item_selector">
+    android:background="@drawable/recording_item_selector"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:clickable="true"
+    android:minHeight="72dp">
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@android:drawable/ic_media_play"
+        android:contentDescription="@string/btn_play"
+        android:tint="@color/primary" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginStart="12dp">
 
         <TextView
             android:id="@+id/tvItemFileName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@android:color/black"
-            android:textStyle="bold" />
+            android:textSize="15sp"
+            android:textColor="@color/status_text"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="middle" />
 
-        <TextView
-            android:id="@+id/tvItemDuration"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textColor="@color/hint_text"
-            android:layout_marginTop="2dp" />
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:id="@+id/tvItemDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:textColor="@color/hint_text" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  |  "
+                android:textSize="13sp"
+                android:textColor="@color/hint_text" />
+
+            <TextView
+                android:id="@+id/tvItemDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:textColor="@color/hint_text" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvItemDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="11sp"
-        android:textColor="@color/hint_text" />
+    <ImageView
+        android:id="@+id/ivPlaying"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@android:drawable/ic_media_play"
+        android:contentDescription="@string/btn_play"
+        android:tint="@color/play_button"
+        android:visibility="gone" />
 
 </LinearLayout>

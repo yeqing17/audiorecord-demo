@@ -1,143 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    tools:context=".MainActivity">
-
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp" />
-
-    <TextView
-        android:id="@+id/tvStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/status_idle"
-        android:textSize="16sp"
-        android:textColor="@color/status_text"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp" />
-
-    <TextView
-        android:id="@+id/tvDuration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="00:00:00"
-        android:textSize="48sp"
-        android:textStyle="bold"
-        android:textColor="@color/primary"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp" />
-
-    <Button
-        android:id="@+id/btnRecord"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_start_recording"
-        android:background="@drawable/btn_record_selector"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginTop="24dp"
-        android:layout_marginHorizontal="16dp"
-        android:paddingVertical="16dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
+    android:fillViewport="true"
+    android:background="@color/background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="16dp">
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <Button
-            android:id="@+id/btnPlay"
-            android:layout_width="0dp"
+        <!-- Header Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/btn_play"
-            android:background="@drawable/btn_play_selector"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:enabled="false"
-            android:layout_marginEnd="8dp"
-            android:paddingVertical="12dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true" />
+            android:elevation="4dp"
+            app:cardCornerRadius="16dp"
+            app:cardBackgroundColor="@color/card_background"
+            app:cardUseCompatPadding="true">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary" />
+
+                <TextView
+                    android:id="@+id/tvStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/status_idle"
+                    android:textSize="16sp"
+                    android:textColor="@color/status_text"
+                    android:layout_marginTop="8dp" />
+
+                <TextView
+                    android:id="@+id/tvDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00:00"
+                    android:textSize="52sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="monospace" />
+
+                <TextView
+                    android:id="@+id/tvFileName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="@color/hint_text"
+                    android:layout_marginTop="8dp"
+                    android:maxLines="1"
+                    android:ellipsize="middle"
+                    tools:text="recording_20240101_120000.wav" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Record Button -->
         <Button
-            android:id="@+id/btnStop"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/btn_stop"
-            android:background="@drawable/btn_stop_selector"
+            android:id="@+id/btnRecord"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:text="@string/btn_start_recording"
+            android:background="@drawable/btn_record_selector"
             android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:enabled="false"
-            android:layout_marginStart="8dp"
-            android:paddingVertical="12dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
             android:focusable="true"
-            android:focusableInTouchMode="true" />
+            android:focusableInTouchMode="true"
+            android:nextFocusDown="@id/btnPlay" />
+
+        <!-- Play/Stop Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+
+            <Button
+                android:id="@+id/btnPlay"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:text="@string/btn_play"
+                android:background="@drawable/btn_play_selector"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:enabled="false"
+                android:layout_marginEnd="8dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:nextFocusDown="@id/listViewRecordings"
+                android:nextFocusUp="@id/btnRecord" />
+
+            <Button
+                android:id="@+id/btnStop"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:text="@string/btn_stop"
+                android:background="@drawable/btn_stop_selector"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:enabled="false"
+                android:layout_marginStart="8dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:nextFocusDown="@id/listViewRecordings"
+                android:nextFocusUp="@id/btnRecord" />
+
+        </LinearLayout>
+
+        <!-- Recording History Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recording_history"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/status_text"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="280dp">
+
+            <ListView
+                android:id="@+id/listViewRecordings"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="8dp"
+                android:scrollbars="vertical"
+                android:choiceMode="singleChoice"
+                android:listSelector="@android:color/transparent" />
+
+            <TextView
+                android:id="@+id/tvEmptyHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_recordings"
+                android:textSize="15sp"
+                android:textColor="@color/hint_text"
+                android:layout_gravity="center"
+                android:gravity="center" />
+
+        </FrameLayout>
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvFileName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:textColor="@color/hint_text"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        tools:text="recording_20240101_120000.wav" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#E0E0E0"
-        android:layout_marginVertical="16dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/recording_history"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/status_text"
-        android:layout_marginBottom="8dp" />
-
-    <ListView
-        android:id="@+id/listViewRecordings"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="4dp"
-        android:scrollbars="vertical"
-        android:choiceMode="singleChoice" />
-
-    <TextView
-        android:id="@+id/tvEmptyHint"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="@string/no_recordings"
-        android:textSize="14sp"
-        android:textColor="@color/hint_text"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:visibility="gone" />
-
-</LinearLayout>
+</ScrollView>
