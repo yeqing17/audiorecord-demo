@@ -2,15 +2,14 @@ package com.example.audiorecord
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
 import android.media.MediaMetadataRetriever
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.ListView
@@ -30,7 +29,8 @@ data class RecordingItem(
     val fileName: String,
     val date: Date,
     val duration: String,
-    var isPlaying: Boolean = false
+    var isPlaying: Boolean = false,
+    var isSelected: Boolean = false
 )
 
 class RecordingAdapter(
@@ -64,12 +64,8 @@ class RecordingAdapter(
         // Show playing indicator
         ivPlaying.visibility = if (item.isPlaying) View.VISIBLE else View.GONE
 
-        // Set selected state for visual feedback
-        view.isActivated = item.isPlaying
-
-        // Set focusable for focus indicator
-        view.isFocusable = true
-        view.isFocusableInTouchMode = true
+        // Set activated state for selected item
+        view.isActivated = item.isSelected || item.isPlaying
 
         return view
     }
@@ -85,6 +81,13 @@ class RecordingAdapter(
         notifyDataSetChanged()
     }
 
+    fun setSelectedPosition(position: Int) {
+        recordings.forEachIndexed { index, item ->
+            item.isSelected = (index == position)
+        }
+        notifyDataSetChanged()
+    }
+
     fun setPlayingPosition(position: Int) {
         recordings.forEachIndexed { index, item ->
             item.isPlaying = (index == position)
@@ -94,6 +97,11 @@ class RecordingAdapter(
 
     fun clearPlaying() {
         recordings.forEach { it.isPlaying = false }
+        notifyDataSetChanged()
+    }
+
+    fun clearSelection() {
+        recordings.forEach { it.isSelected = false }
         notifyDataSetChanged()
     }
 }
@@ -120,7 +128,7 @@ class MainActivity : AppCompatActivity() {
 
     private val recordings = mutableListOf<RecordingItem>()
     private var currentRecordingFile: File? = null
-    private var selectedPosition = -1
+    private var focusedPosition = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -171,29 +179,53 @@ class MainActivity : AppCompatActivity() {
             stopPlayback()
         }
 
-        // Set item click listener for selection and playback
+        // Touch click - directly play
         listViewRecordings.setOnItemClickListener { _, _, position, _ ->
-            selectRecording(position)
+            playRecordingAtPosition(position)
         }
-    }
 
-    private fun selectRecording(position: Int) {
-        if (position < 0 || position >= recordings.size) return
+        // Handle keyboard/D-pad events for selection
+        listViewRecordings.setOnKeyListener { _, keyCode, event ->
+            if (event.action == KeyEvent.ACTION_DOWN) {
+                when (keyCode) {
+                    KeyEvent.KEYCODE_DPAD_CENTER,
+                    KeyEvent.KEYCODE_ENTER -> {
+                        // Play the currently focused item
+                        val position = listViewRecordings.selectedItemPosition
+                        if (position != ListView.INVALID_POSITION && position < recordings.size) {
+                            playRecordingAtPosition(position)
+                        }
+                        true
+                    }
+                    else -> false
+                }
+            } else {
+                false
+            }
+        }
 
-        selectedPosition = position
-        val item = recordings[position]
+        // Update selection visual when focus changes
+        listViewRecordings.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                recordingAdapter.clearSelection()
+            }
+        }
 
-        // Update UI
-        tvFileName.text = item.fileName
-        btnPlay.isEnabled = true
-        btnPlay.requestFocus()
+        // Track selection changes
+        listViewRecordings.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                focusedPosition = position
+                recordingAdapter.setSelectedPosition(position)
+                if (position >= 0 && position < recordings.size) {
+                    tvFileName.text = recordings[position].fileName
+                }
+            }
 
-        // Visual feedback
-        listViewRecordings.setItemChecked(position, true)
-        listViewRecordings.setSelection(position)
-
-        // Auto-play the selected recording
-        playRecordingAtPosition(position)
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                focusedPosition = -1
+                recordingAdapter.clearSelection()
+            }
+        })
     }
 
     private fun playRecordingAtPosition(position: Int) {
@@ -387,33 +419,31 @@ class MainActivity : AppCompatActivity() {
             tvStatus.text = getString(R.string.status_idle)
 
             // Auto-select the new recording
-            selectedPosition = 0
+            focusedPosition = 0
             tvFileName.text = file.name
         }
     }
 
     private fun startPlayback() {
-        // If no selection, try latest recording
-        if (selectedPosition < 0 && recordings.isNotEmpty()) {
-            selectedPosition = 0
+        // If focused on a list item, play that
+        if (focusedPosition >= 0 && focusedPosition < recordings.size) {
+            playRecordingAtPosition(focusedPosition)
+            return
         }
 
-        if (selectedPosition >= 0 && selectedPosition < recordings.size) {
-            playRecordingAtPosition(selectedPosition)
-        } else {
-            val latestFile = getLatestRecording()
-            if (latestFile != null && latestFile.exists()) {
-                if (audioPlayer.play(latestFile)) {
-                    btnPlay.text = getString(R.string.btn_pause)
-                    btnStop.isEnabled = true
-                    tvStatus.text = getString(R.string.status_playing)
-                    tvFileName.text = latestFile.name
-                } else {
-                    Toast.makeText(this, "Failed to play recording", Toast.LENGTH_SHORT).show()
-                }
+        // Otherwise, try latest recording
+        val latestFile = getLatestRecording()
+        if (latestFile != null && latestFile.exists()) {
+            if (audioPlayer.play(latestFile)) {
+                btnPlay.text = getString(R.string.btn_pause)
+                btnStop.isEnabled = true
+                tvStatus.text = getString(R.string.status_playing)
+                tvFileName.text = latestFile.name
             } else {
-                Toast.makeText(this, R.string.no_recording, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to play recording", Toast.LENGTH_SHORT).show()
             }
+        } else {
+            Toast.makeText(this, R.string.no_recording, Toast.LENGTH_SHORT).show()
         }
     }
 

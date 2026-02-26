@@ -133,6 +133,7 @@
 
         <!-- Recording History Section -->
         <TextView
+            android:id="@+id/tvHistoryTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/recording_history"
@@ -140,7 +141,8 @@
             android:textStyle="bold"
             android:textColor="@color/status_text"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="12dp"
+            android:focusable="false" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -154,7 +156,10 @@
                 android:dividerHeight="8dp"
                 android:scrollbars="vertical"
                 android:choiceMode="singleChoice"
-                android:listSelector="@android:color/transparent" />
+                android:listSelector="@android:color/transparent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:descendantFocusability="afterDescendants" />
 
             <TextView
                 android:id="@+id/tvEmptyHint"
@@ -167,6 +172,16 @@
                 android:gravity="center" />
 
         </FrameLayout>
+
+        <!-- Hint text -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hint_select_recording"
+            android:textSize="12sp"
+            android:textColor="@color/hint_text"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_horizontal" />
 
     </LinearLayout>
 

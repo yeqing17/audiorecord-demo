@@ -9,11 +9,11 @@
     <color name="stop_button">#FB8C00</color>
     <color name="status_text">#424242</color>
     <color name="hint_text">#9E9E9E</color>
-    <color name="focus_border">#2196F3</color>
-    <color name="focus_border_thick">#1976D2</color>
+    <color name="focus_border">#FFEB3B</color>
+    <color name="focus_border_thick">#FFC107</color>
     <color name="background">#FAFAFA</color>
     <color name="card_background">#FFFFFF</color>
     <color name="divider">#E0E0E0</color>
-    <color name="item_selected">#E3F2FD</color>
-    <color name="item_focused">#BBDEFB</color>
+    <color name="item_selected">#C8E6C9</color>
+    <color name="item_focused">#FFF9C4</color>
 </resources>

@@ -17,4 +17,5 @@
     <string name="recording_history">Recording History</string>
     <string name="no_recordings">No recordings yet</string>
     <string name="select_to_play">Select a recording to play</string>
+    <string name="hint_select_recording">Press OK/Enter on a recording to play</string>
 </resources>
