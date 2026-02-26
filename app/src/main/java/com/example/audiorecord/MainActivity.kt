@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.BaseAdapter
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
@@ -118,9 +119,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvDuration: TextView
     private lateinit var tvFileName: TextView
     private lateinit var tvEmptyHint: TextView
-    private lateinit var btnRecord: TextView
-    private lateinit var btnPlay: TextView
-    private lateinit var btnStop: TextView
+    private lateinit var btnRecord: Button
+    private lateinit var btnPlay: Button
+    private lateinit var btnStop: Button
     private lateinit var listViewRecordings: ListView
 
     private lateinit var audioRecorder: AudioRecorder

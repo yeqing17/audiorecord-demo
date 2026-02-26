@@ -74,7 +74,7 @@
         </androidx.cardview.widget.CardView>
 
         <!-- Record Button -->
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnRecord"
             android:layout_width="match_parent"
             android:layout_height="64dp"
@@ -95,7 +95,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="12dp">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnPlay"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
@@ -112,7 +112,7 @@
                 android:nextFocusDown="@id/listViewRecordings"
                 android:nextFocusUp="@id/btnRecord" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnStop"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
