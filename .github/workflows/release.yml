@@ -30,11 +30,11 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
-      - name: Build Release APK
-        run: gradle assembleRelease --no-daemon
+      - name: Build Debug APK (signed with debug key)
+        run: gradle assembleDebug --no-daemon
 
       - name: List APK files
-        run: ls -la app/build/outputs/apk/release/
+        run: ls -la app/build/outputs/apk/debug/
 
       - name: Get version from tag
         id: get_version
@@ -42,7 +42,7 @@ jobs:
 
       - name: Rename APK for release
         run: |
-          APK_FILE=$(find app/build/outputs/apk/release -name "*.apk" -type f | head -n 1)
+          APK_FILE=$(find app/build/outputs/apk/debug -name "*.apk" -type f | head -n 1)
           cp "$APK_FILE" "audiorecord-demo-${{ steps.get_version.outputs.VERSION }}.apk"
 
       - name: Create Release
