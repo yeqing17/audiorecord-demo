@@ -29,7 +29,7 @@ class RecordingAdapter(
 
     override fun getItem(position: Int): RecordingItem = recordings[position]
 
-    override fun getItemId(position: Int): Long = position
+    override fun getItemId(position: Int): Long = position.toLong()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view = convertView ?: LayoutInflater.from(context)
