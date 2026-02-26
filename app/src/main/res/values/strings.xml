@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Audio Record Demo</string>
+    <string name="btn_start_recording">Start Recording</string>
+    <string name="btn_stop_recording">Stop Recording</string>
+    <string name="btn_play">Play</string>
+    <string name="btn_pause">Pause</string>
+    <string name="btn_stop">Stop</string>
+    <string name="status_idle">Ready to record</string>
+    <string name="status_recording">Recording...</string>
+    <string name="status_playing">Playing...</string>
+    <string name="status_paused">Paused</string>
+    <string name="duration_format">Duration: %s</string>
+    <string name="permission_required">Microphone permission is required</string>
+    <string name="no_recording">No recording available</string>
+    <string name="recording_saved">Recording saved: %s</string>
+</resources>
