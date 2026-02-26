@@ -18,6 +18,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.1] - 2026-02-26
+
+### Fixed
+- 修复按钮焦点样式不显示的问题
+  - 将 `Button` 改为 `AppCompatButton` 避免Material Components自动应用backgroundTint
+  - 增加焦点边框粗细到 6dp，更加醒目
+  - 使用黄色焦点边框与按钮颜色形成明显对比
+
+## [1.1.0] - 2026-02-26
+
+### Fixed
+- 添加缺失的 `AdapterView` 导入修复编译错误
+
+## [1.0.9] - 2026-02-26
+
+### Changed
+- 焦点边框颜色改为黄色（#FFEB3B），与按钮颜色形成对比
+- 列表项焦点背景改为浅黄色
+
+### Fixed
+- 修复录音列表无法通过键盘选中播放的问题
+  - 添加 OnKeyListener 监听 OK/Enter 键
+  - 添加 OnItemSelectedListener 跟踪焦点变化
+
 ## [1.0.8] - 2026-02-26
 
 ### Added
@@ -28,7 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - 重新设计 UI 界面，使用卡片式布局
-- 优化按钮焦点样式，添加 4dp 蓝色边框
+- 优化按钮焦点样式，添加蓝色边框
 - 优化列表项焦点样式，添加蓝色边框和浅蓝背景
 - 增大字体和间距，改善可读性
 - 录音时长使用等宽字体显示
@@ -108,7 +132,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/yeqing17/audiorecord-demo/compare/v1.0.8...HEAD
+[Unreleased]: https://github.com/yeqing17/audiorecord-demo/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/yeqing17/audiorecord-demo/compare/v1.1.0...v1.1.1
+[1.1.0]: https://github.com/yeqing17/audiorecord-demo/compare/v1.0.9...v1.1.0
+[1.0.9]: https://github.com/yeqing17/audiorecord-demo/compare/v1.0.8...v1.0.9
 [1.0.8]: https://github.com/yeqing17/audiorecord-demo/compare/v1.0.7...v1.0.8
 [1.0.7]: https://github.com/yeqing17/audiorecord-demo/compare/v1.0.6...v1.0.7
 [1.0.6]: https://github.com/yeqing17/audiorecord-demo/compare/v1.0.5...v1.0.6

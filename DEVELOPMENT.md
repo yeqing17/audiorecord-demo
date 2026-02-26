@@ -34,9 +34,14 @@ audiorecord-demo/
 │   │   │   └── values/                    # 字符串、颜色资源
 │   │   └── AndroidManifest.xml            # 权限声明
 │   └── build.gradle.kts
+├── docs/
+│   ├── DEVELOPMENT.md                     # 开发计划文档
+│   └── ANDROID_FOCUS_BEST_PRACTICES.md   # 焦点处理最佳实践
 ├── build.gradle.kts
 ├── settings.gradle.kts
 ├── gradle.properties
+├── README.md
+├── CHANGELOG.md
 └── .github/workflows/release.yml          # GitHub Actions CI/CD
 ```
 
@@ -115,9 +120,11 @@ val audioFormat = ENCODING_PCM_16BIT  // 16位
 
 #### 焦点样式
 
-- **按钮焦点**：4dp 蓝色边框高亮
-- **列表项焦点**：蓝色边框 + 浅蓝背景
-- **选中项**：蓝色边框 + 播放图标指示
+- **按钮焦点**：6dp 黄色边框高亮（使用 AppCompatButton）
+- **列表项焦点**：黄色边框 + 浅黄背景
+- **选中项**：绿色边框 + 播放图标指示
+
+> 详细焦点处理指南见 [Android 焦点处理最佳实践](docs/ANDROID_FOCUS_BEST_PRACTICES.md)
 
 ### GitHub Actions CI/CD
 
@@ -217,7 +224,8 @@ git push origin v1.0.0
 
 1. ~~GitHub Actions 缓存服务错误~~ - 已通过禁用缓存解决
 2. ~~APK 未签名无法安装~~ - 已改为构建 Debug APK
-3. ~~焦点样式不明显~~ - 已优化焦点样式
+3. ~~焦点样式不明显~~ - 已优化焦点样式，使用 AppCompatButton + 黄色边框
+4. ~~列表项无法通过键盘选中播放~~ - 已添加 OnKeyListener 监听 OK/Enter 键
 
 ## 参考资料
 
@@ -225,3 +233,4 @@ git push origin v1.0.0
 - [Android AudioTrack API](https://developer.android.com/reference/android/media/AudioTrack)
 - [WAV 文件格式](https://en.wikipedia.org/wiki/WAV)
 - [GitHub Actions for Android](https://github.com/actions/setup-java)
+- [Android 焦点处理最佳实践](docs/ANDROID_FOCUS_BEST_PRACTICES.md)

@@ -7,14 +7,14 @@
 - 🎤 **录音功能**：使用 AudioRecord API 录制 PCM 音频，保存为 WAV 格式
 - 🔊 **播放功能**：支持播放、暂停、停止录音
 - 📝 **历史记录**：自动保存所有录音，支持从列表中选择播放
-- 🎨 **现代 UI**：Material Design 风格界面，焦点状态清晰可见
+- 🎨 **现代 UI**：Material Design 风格界面，清晰的焦点状态指示
 - 📱 **Android 9+**：目标 API 28+，兼容现代 Android 设备
 
 ## 截图
 
-| 录音界面 | 历史记录 |
-|---------|---------|
-| 录音按钮、时长显示、播放控制 | 录音列表、选择播放 |
+| 主界面 | 录音中 | 播放历史 |
+|--------|--------|----------|
+| 录音按钮、时长显示 | 实时录音时长 | 选择播放录音 |
 
 ## 技术规格
 
@@ -58,10 +58,13 @@ audiorecord-demo/
 │   │   │   └── AudioPlayer.kt      # 播放管理类
 │   │   ├── res/
 │   │   │   ├── layout/             # 布局文件
-│   │   │   ├── drawable/           # 图形资源
-│   │   │   └── values/             # 字符串、颜色等
+│   │   │   ├── drawable/           # 按钮选择器、焦点样式
+│   │   │   └── values/            # 字符串、颜色资源
 │   │   └── AndroidManifest.xml
 │   └── build.gradle.kts
+├── docs/
+│   ├── DEVELOPMENT.md              # 开发计划文档
+│   └── ANDROID_FOCUS_BEST_PRACTICES.md  # Android 焦点处理最佳实践
 ├── build.gradle.kts
 ├── settings.gradle.kts
 └── .github/workflows/release.yml  # CI/CD 配置
@@ -94,6 +97,12 @@ cd audiorecord-demo
 git tag v1.0.x
 git push origin v1.0.x
 ```
+
+## 文档
+
+- [开发计划文档](docs/DEVELOPMENT.md) - 详细的技术方案和开发里程碑
+- [Android 焦点处理最佳实践](docs/ANDROID_FOCUS_BEST_PRACTICES.md) - TV 应用焦点处理指南
+- [更新日志](CHANGELOG.md) - 版本更新记录
 
 ## 权限说明
 
