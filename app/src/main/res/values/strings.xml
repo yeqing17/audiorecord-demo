@@ -14,4 +14,7 @@
     <string name="permission_required">Microphone permission is required</string>
     <string name="no_recording">No recording available</string>
     <string name="recording_saved">Recording saved: %s</string>
+    <string name="recording_history">Recording History</string>
+    <string name="no_recordings">No recordings yet</string>
+    <string name="select_to_play">Select a recording to play</string>
 </resources>

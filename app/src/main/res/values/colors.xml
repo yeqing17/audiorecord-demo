@@ -9,4 +9,6 @@
     <color name="stop_button">#FF9800</color>
     <color name="status_text">#666666</color>
     <color name="hint_text">#999999</color>
+    <color name="focus_highlight">#FFEB3B</color>
+    <color name="focus_border">#1565C0</color>
 </resources>

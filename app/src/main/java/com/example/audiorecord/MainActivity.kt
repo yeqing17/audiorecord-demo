@@ -2,16 +2,22 @@ package com.example.audiorecord
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.media.MediaMetadataRetriever
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.Button
+import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -25,14 +31,19 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvStatus: TextView
     private lateinit var tvDuration: TextView
     private lateinit var tvFileName: TextView
+    private lateinit var tvEmptyHint: TextView
     private lateinit var btnRecord: Button
     private lateinit var btnPlay: Button
     private lateinit var btnStop: Button
+    private lateinit var listViewRecordings: ListView
 
     private lateinit var audioRecorder: AudioRecorder
     private lateinit var audioPlayer: AudioPlayer
+    private lateinit var recordingAdapter: RecordingAdapter
 
     private var currentRecordingFile: File? = null
+    private var selectedRecordingFile: File? = null
+    private val recordings = mutableListOf<RecordingItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,15 +52,21 @@ class MainActivity : AppCompatActivity() {
         initViews()
         initAudioComponents()
         checkPermissions()
+        loadRecordings()
     }
 
     private fun initViews() {
         tvStatus = findViewById(R.id.tvStatus)
         tvDuration = findViewById(R.id.tvDuration)
         tvFileName = findViewById(R.id.tvFileName)
+        tvEmptyHint = findViewById(R.id.tvEmptyHint)
         btnRecord = findViewById(R.id.btnRecord)
         btnPlay = findViewById(R.id.btnPlay)
         btnStop = findViewById(R.id.btnStop)
+        listViewRecordings = findViewById(R.id.listViewRecordings)
+
+        recordingAdapter = RecordingAdapter(this, recordings)
+        listViewRecordings.adapter = recordingAdapter
 
         btnRecord.setOnClickListener {
             if (audioRecorder.isRecording()) {
@@ -76,6 +93,14 @@ class MainActivity : AppCompatActivity() {
         btnStop.setOnClickListener {
             stopPlayback()
         }
+
+        listViewRecordings.setOnItemClickListener { _, _, position, _ ->
+            val item = recordingAdapter.getItem(position)
+            selectedRecordingFile = item.file
+            tvFileName.text = item.fileName
+            btnPlay.isEnabled = true
+            listViewRecordings.setItemChecked(position, true)
+        }
     }
 
     private fun initAudioComponents() {
@@ -92,7 +117,7 @@ class MainActivity : AppCompatActivity() {
         audioPlayer.setOnCompletionListener {
             runOnUiThread {
                 btnPlay.text = getString(R.string.btn_play)
-                btnPlay.isEnabled = true
+                btnPlay.isEnabled = selectedRecordingFile != null || currentRecordingFile != null
                 btnStop.isEnabled = false
                 tvStatus.text = getString(R.string.status_idle)
             }
@@ -142,6 +167,48 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadRecordings() {
+        val outputDir = getOutputDirectory()
+        val files = outputDir.listFiles { _, name -> name.endsWith(".wav") }
+
+        recordings.clear()
+
+        if (files != null && files.isNotEmpty()) {
+            files.sortByDescending { it.lastModified() }
+
+            for (file in files) {
+                val duration = getWavDuration(file)
+                val item = RecordingItem(
+                    file = file,
+                    fileName = file.name,
+                    date = Date(file.lastModified()),
+                    duration = formatDuration(duration)
+                )
+                recordings.add(item)
+            }
+
+            listViewRecordings.visibility = View.VISIBLE
+            tvEmptyHint.visibility = View.GONE
+        } else {
+            listViewRecordings.visibility = View.GONE
+            tvEmptyHint.visibility = View.VISIBLE
+        }
+
+        recordingAdapter.notifyDataSetChanged()
+    }
+
+    private fun getWavDuration(file: File): Long {
+        return try {
+            val retriever = MediaMetadataRetriever()
+            retriever.setDataSource(file.absolutePath)
+            val durationStr = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+            retriever.release()
+            durationStr?.toLongOrNull() ?: 0L
+        } catch (e: Exception) {
+            0L
+        }
+    }
+
     private fun startRecording() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
             != PackageManager.PERMISSION_GRANTED) {
@@ -149,14 +216,12 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        // Stop any ongoing playback
         stopPlayback()
 
         val filePath = audioRecorder.startRecording()
         if (filePath != null) {
             currentRecordingFile = File(filePath)
             btnRecord.text = getString(R.string.btn_stop_recording)
-            btnRecord.setBackgroundColor(getColor(R.color.record_button_active))
             btnPlay.isEnabled = false
             btnStop.isEnabled = false
             tvStatus.text = getString(R.string.status_recording)
@@ -170,23 +235,38 @@ class MainActivity : AppCompatActivity() {
     private fun stopRecording() {
         val filePath = audioRecorder.stopRecording()
         if (filePath != null) {
+            val file = File(filePath)
             Log.d(TAG, "Recording saved to: $filePath")
             Toast.makeText(
                 this,
-                getString(R.string.recording_saved, File(filePath).name),
+                getString(R.string.recording_saved, file.name),
                 Toast.LENGTH_SHORT
             ).show()
 
+            // Add new recording to the list
+            val duration = getWavDuration(file)
+            val item = RecordingItem(
+                file = file,
+                fileName = file.name,
+                date = Date(file.lastModified()),
+                duration = formatDuration(duration)
+            )
+            recordingAdapter.addRecording(item)
+
+            listViewRecordings.visibility = View.VISIBLE
+            tvEmptyHint.visibility = View.GONE
+
             btnRecord.text = getString(R.string.btn_start_recording)
-            btnRecord.setBackgroundColor(getColor(R.color.record_button))
             btnPlay.isEnabled = true
             btnStop.isEnabled = false
             tvStatus.text = getString(R.string.status_idle)
+
+            selectedRecordingFile = file
         }
     }
 
     private fun startPlayback() {
-        val fileToPlay = currentRecordingFile ?: getLatestRecording()
+        val fileToPlay = selectedRecordingFile ?: currentRecordingFile ?: getLatestRecording()
 
         if (fileToPlay == null || !fileToPlay.exists()) {
             Toast.makeText(this, R.string.no_recording, Toast.LENGTH_SHORT).show()
