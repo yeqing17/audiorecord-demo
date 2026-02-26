@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,9 +33,17 @@ jobs:
       - name: Build Release APK
         run: gradle assembleRelease --no-daemon
 
+      - name: List APK files
+        run: ls -la app/build/outputs/apk/release/
+
       - name: Get version from tag
         id: get_version
         run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Rename APK for release
+        run: |
+          APK_FILE=$(find app/build/outputs/apk/release -name "*.apk" -type f | head -n 1)
+          cp "$APK_FILE" "audiorecord-demo-${{ steps.get_version.outputs.VERSION }}.apk"
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
@@ -52,9 +63,7 @@ jobs:
 
             ### Minimum Requirements
             - Android 9 (API 28) or higher
-          files: |
-            app/build/outputs/apk/release/app-release.apk
-            app/build/outputs/apk/release/output-metadata.json
+          files: audiorecord-demo-${{ steps.get_version.outputs.VERSION }}.apk
           draft: false
           prerelease: false
         env:
